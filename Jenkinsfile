@@ -3,17 +3,17 @@ pipeline {
     stages {
         stage('Fetch Data') {
             steps {
-                sh 'python fetch_nba_data.py'
+                sh './fetch_nba_data.sh'
             }
         }
         stage('Process Data') {
             steps {
-                sh 'python process_nba_data.py'
+                sh './process_nba_data.sh'
             }
         }
         stage('Visualize Data') {
             steps {
-                sh 'python visualize_nba_data.py'
+                sh './visualize_nba_data.sh'
             }
         }
     }
