@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        GIT_CREDENTIALS_ID = 'github-creds' 
-    }
     stages {
         stage('Checkout Code') {
             steps {
@@ -25,14 +22,19 @@ pipeline {
             }
         }
         stage('Push to GitHub') {
+            environment {
+                GIT_USERNAME = credentials('github-username')
+                GIT_PASSWORD = credentials('github-password')
+            }
             steps {
-                withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: 'github-credentials-id', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                     sh '''
-                        git config user.name "$GIT_USERNAME"
-                        git config user.email "jlocusbo3@gmail.com"
-                        git add index.html
-                        git commit -m "Add generated NBA visualization"
-                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/joshuaannor/NBA-Pipeline.git main
+                    git config user.name "$GIT_USERNAME"
+                    git config user.email "jlocusbo3@gmail.com"
+                    git pull origin main
+                    git add index.html
+                    git commit -m "Add generated NBA visualization"
+                    git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/joshuaannor/NBA-Pipeline.git main
                     '''
                 }
             }
