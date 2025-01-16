@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GIT_CREDENTIALS_ID = 'github-creds' // Replace with the ID you used in Jenkins credentials
+        GIT_CREDENTIALS_ID = 'your-credentials-id' // Replace with your actual credentials ID
     }
     stages {
         stage('Checkout Code') {
@@ -29,7 +29,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh '''
                         git config user.name "$GIT_USERNAME"
-                        git config user.email "jlocusbo3@gmail.com" // Replace with your GitHub email
+                        git config user.email "jlocusbo3@gmail.com"
                         git add index.html
                         git commit -m "Add generated NBA visualization"
                         git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/joshuaannor/NBA-Pipeline.git main
