@@ -16,5 +16,16 @@ pipeline {
                 sh './visualize_nba_data.sh'
             }
         }
+        stage('Push to GitHub') {
+            steps {
+                sh '''
+                    git config user.name "joshuaannor"
+                    git config user.email "jlocusbo3@gmail.com"
+                    git add index.html
+                    git commit -m "Add generated NBA visualization"
+                    git push origin main
+                '''
+            }
+        }
     }
 }
