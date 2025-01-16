@@ -19,6 +19,7 @@ pipeline {
         stage('Push to GitHub') {
             steps {
                 sh '''
+                    git checkout main
                     git config user.name "joshuaannor"
                     git config user.email "jlocusbo3@gmail.com"
                     git add index.html
