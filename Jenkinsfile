@@ -1,6 +1,14 @@
 pipeline {
     agent any
+    environment {
+        GIT_CREDENTIALS_ID = 'github-creds' // Replace with the ID you used in Jenkins credentials
+    }
     stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Fetch Data') {
             steps {
                 sh './fetch_nba_data.sh'
@@ -17,19 +25,22 @@ pipeline {
             }
         }
         stage('Push to GitHub') {
-    steps {
-        script {
-            withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                sh '''
-                git checkout main
-                git config user.name "joshuaannor"
-                git config user.email "jlocusbo3@gmail.com"
-                git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/joshuaannor/NBA-Pipeline.git
-                git add index.html
-                git commit -m "Add generated NBA visualization"
-                git push origin main
-                '''
+            steps {
+                withCredentials([usernamePassword(credentialsId: env.GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    sh '''
+                        git config user.name "$GIT_USERNAME"
+                        git config user.email "your-email@example.com" // Replace with your GitHub email
+                        git add index.html
+                        git commit -m "Add generated NBA visualization"
+                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/joshuaannor/NBA-Pipeline.git main
+                    '''
+                }
             }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline finished.'
         }
     }
 }
