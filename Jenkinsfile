@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GIT_CREDENTIALS_ID = 'your-credentials-id' // Replace with your actual credentials ID
+        GIT_CREDENTIALS_ID = 'github-creds' 
     }
     stages {
         stage('Checkout Code') {
